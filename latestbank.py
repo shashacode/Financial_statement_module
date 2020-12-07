@@ -135,11 +135,38 @@ class FinStatement:
     def get_des(self):
 
         g_doc = self.get_doc()
-        # d = df['Balance']
-        d = pd.to_numeric(g_doc['Balance'],errors='coerce')
-        desc = d.mean(axis = 0, skipna = True)
         
-        return desc
+        bal = g_doc['Balance'].str.replace(',', '').astype(float)
+        d_bal = bal.mean().round()
+
+        # This gets the average balance
+
+        deb = g_doc['Debit'].str.replace(',', '').astype(float)
+        d_deb = deb.mean().round()
+
+        # This gets the average debit
+
+        cred = g_doc['Credit'].str.replace(',', '').astype(float)
+        d_cred = cred.mean().round()
+        
+        # This gets the average credit
+
+        total_rows = len(g_doc)
+        # This gets the number of rows
+
+        g_doc['Date'] = pd.to_datetime(g_doc['Date'])
+
+        min_date = g_doc['Date'].min()
+        max_date = g_doc['Date'].max()
+
+        # This gets the date
+
+        print(f'The total number of transaction in this statement is {total_rows}')
+        print(f'The statement is dated from {min_date} to {max_date}')
+        print(f'The average balance of this statement is ₦{d_bal}')
+        print(f'The average credit amount is ₦{d_cred}')
+        print(f'The average debit amount is ₦{d_deb}')
+        
 
     def menu(self):
         
